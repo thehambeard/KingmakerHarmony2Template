@@ -1,0 +1,10 @@
+{
+    "Id": "KingmakerHarmony2Template",
+    "DisplayName": "KingmakerHarmony2Template",
+    "Author": "Hambeard",
+    "Version": "1.0.0",
+    "ManagerVersion": "0.18.0",
+    "Requirements": [],
+    "AssemblyName": "KingmakerHarmony2Template.dll",
+    "EntryMethod": "KingmakerHarmony2Template.Main.Load"
+}
