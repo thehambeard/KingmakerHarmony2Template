@@ -145,7 +145,7 @@ namespace KingmakerHarmony2Template.Utilities
 
         public static string StringJoin<T>(this IEnumerable<T> array, Func<T, string> map, string separator = " ") => string.Join(separator, array.Select(map));
 
-        static readonly FastSetter<BlueprintScriptableObject, string> blueprintScriptableObject_set_AssetId = Helpers.CreateFieldSetter<BlueprintScriptableObject, string>("m_AssetGuid");
+        static readonly FastRef<BlueprintScriptableObject, string> blueprintScriptableObject_set_AssetId = Helpers.CreateFieldSetter<BlueprintScriptableObject, string>("m_AssetGuid");
 
 #if DEBUG
         static readonly Dictionary<String, BlueprintScriptableObject> assetsByName = new Dictionary<String, BlueprintScriptableObject>();
@@ -161,7 +161,7 @@ namespace KingmakerHarmony2Template.Utilities
                 guid = Helpers.GuidStorage.getGuid(blueprint.name);
             }
             Main.Mod.Debug(guid);
-            blueprintScriptableObject_set_AssetId(blueprint, guid);
+            blueprintScriptableObject_set_AssetId(blueprint) = guid;
             // Sanity check that we don't stop on our own GUIDs or someone else's.
             BlueprintScriptableObject existing;
             if (library.BlueprintsByAssetId.TryGetValue(guid, out existing))
@@ -325,11 +325,11 @@ namespace KingmakerHarmony2Template.Utilities
             return clone;
         }
 
-        static readonly FastSetter<BlueprintUnitFact, LocalizedString> blueprintUnitFact_set_Description = Helpers.CreateFieldSetter<BlueprintUnitFact, LocalizedString>("m_Description");
-        static readonly FastSetter<BlueprintUnitFact, Sprite> blueprintUnitFact_set_Icon = Helpers.CreateFieldSetter<BlueprintUnitFact, Sprite>("m_Icon");
-        static readonly FastSetter<BlueprintUnitFact, LocalizedString> blueprintUnitFact_set_DisplayName = Helpers.CreateFieldSetter<BlueprintUnitFact, LocalizedString>("m_DisplayName");
-        static readonly FastGetter<BlueprintUnitFact, LocalizedString> blueprintUnitFact_get_Description = Helpers.CreateFieldGetter<BlueprintUnitFact, LocalizedString>("m_Description");
-        static readonly FastGetter<BlueprintUnitFact, LocalizedString> blueprintUnitFact_get_DisplayName = Helpers.CreateFieldGetter<BlueprintUnitFact, LocalizedString>("m_DisplayName");
+        static readonly FastRef<BlueprintUnitFact, LocalizedString> blueprintUnitFact_set_Description = Helpers.CreateFieldSetter<BlueprintUnitFact, LocalizedString>("m_Description");
+        static readonly FastRef<BlueprintUnitFact, Sprite> blueprintUnitFact_set_Icon = Helpers.CreateFieldSetter<BlueprintUnitFact, Sprite>("m_Icon");
+        static readonly FastRef<BlueprintUnitFact, LocalizedString> blueprintUnitFact_set_DisplayName = Helpers.CreateFieldSetter<BlueprintUnitFact, LocalizedString>("m_DisplayName");
+        static readonly FastRef<BlueprintUnitFact, LocalizedString> blueprintUnitFact_get_Description = Helpers.CreateFieldGetter<BlueprintUnitFact, LocalizedString>("m_Description");
+        static readonly FastRef<BlueprintUnitFact, LocalizedString> blueprintUnitFact_get_DisplayName = Helpers.CreateFieldGetter<BlueprintUnitFact, LocalizedString>("m_DisplayName");
 
         public static void SetNameDescriptionIcon(this BlueprintUnitFact feature, String displayName, String description, Sprite icon)
         {
@@ -351,8 +351,8 @@ namespace KingmakerHarmony2Template.Utilities
 
         public static void SetNameDescription(this BlueprintUnitFact feature, BlueprintUnitFact other)
         {
-            blueprintUnitFact_set_DisplayName(feature, other.GetName());
-            blueprintUnitFact_set_Description(feature, other.GetDescription());
+            blueprintUnitFact_set_DisplayName(feature) = other.GetName();
+            blueprintUnitFact_set_Description(feature) = other.GetDescription();
         }
 
         public static LocalizedString GetName(this BlueprintUnitFact fact) => (LocalizedString)blueprintUnitFact_get_DisplayName(fact);
@@ -360,27 +360,27 @@ namespace KingmakerHarmony2Template.Utilities
 
         public static void SetIcon(this BlueprintUnitFact feature, Sprite icon)
         {
-            blueprintUnitFact_set_Icon(feature, icon);
+            blueprintUnitFact_set_Icon(feature) = icon;
         }
 
         public static void SetName(this BlueprintUnitFact feature, LocalizedString name)
         {
-            blueprintUnitFact_set_DisplayName(feature, name);
+            blueprintUnitFact_set_DisplayName(feature) = name;
         }
 
         public static void SetName(this BlueprintUnitFact feature, String name)
         {
-            blueprintUnitFact_set_DisplayName(feature, Helpers.CreateString(feature.name + ".Name", name));
+            blueprintUnitFact_set_DisplayName(feature) = Helpers.CreateString(feature.name + ".Name", name);
         }
 
         public static void SetDescription(this BlueprintUnitFact feature, String description)
         {
-            blueprintUnitFact_set_Description(feature, Helpers.CreateString(feature.name + ".Description", description));
+            blueprintUnitFact_set_Description(feature) = Helpers.CreateString(feature.name + ".Description", description);
         }
 
         public static void SetDescription(this BlueprintUnitFact feature, LocalizedString description)
         {
-            blueprintUnitFact_set_Description(feature, description);
+            blueprintUnitFact_set_Description(feature) = description;
         }
 
         public static bool HasFeatureWithId(this LevelEntry level, String id)
@@ -529,11 +529,11 @@ namespace KingmakerHarmony2Template.Utilities
 
 
 
-        static readonly FastSetter<BlueprintArchetype, Sprite> blueprintArchetype_set_Icon = Helpers.CreateFieldSetter<BlueprintArchetype, Sprite>("m_Icon");
+        static readonly FastRef<BlueprintArchetype, Sprite> blueprintArchetype_set_Icon = Helpers.CreateFieldSetter<BlueprintArchetype, Sprite>("m_Icon");
 
         public static void SetIcon(this BlueprintArchetype self, Sprite icon)
         {
-            blueprintArchetype_set_Icon(self, icon);
+            blueprintArchetype_set_Icon(self) = icon;
         }
 
         public static void AddToSpellList(this BlueprintAbility spell, BlueprintSpellList spellList, int level)
@@ -632,9 +632,9 @@ namespace KingmakerHarmony2Template.Utilities
             state.AddSelection(null, feat, feat, level);
         }
 
-        public static void SetIcon(this BlueprintAbilityResource resource, Sprite icon) => setIcon(resource, icon);
+        public static void SetIcon(this BlueprintAbilityResource resource, Sprite icon) => setIcon(resource) = icon;
 
-        static readonly FastSetter<BlueprintAbilityResource, Sprite> setIcon = Helpers.CreateFieldSetter<BlueprintAbilityResource, Sprite>("m_Icon");
+        static readonly FastRef<BlueprintAbilityResource, Sprite> setIcon = Helpers.CreateFieldSetter<BlueprintAbilityResource, Sprite>("m_Icon");
         //internal static readonly FastSetter<BlueprintAbilityResource, object> setMaxAmount = Helpers.CreateFieldSetter<BlueprintAbilityResource, object>("m_MaxAmount");
         //internal static readonly FastGetter<BlueprintAbilityResource, object> getMaxAmount = Helpers.CreateFieldGetter<BlueprintAbilityResource, object>("m_MaxAmount");
         //static readonly Type blueprintAbilityResource_Amount = HarmonyLib.AccessTools.Inner(typeof(BlueprintAbilityResource), "Amount");
@@ -1179,28 +1179,33 @@ namespace KingmakerHarmony2Template.Utilities
 
         public static FastGetter<T, S> CreateGetter<T, S>(string name)
         {
-            return new FastGetter<T, S>(HarmonyLib.FastAccess.CreateGetterHandler<T, S>(HarmonyLib.AccessTools.Property(typeof(T), name)));
+            return new FastGetter<T, S>(HarmonyLib.AccessTools.MethodDelegate<Func <T, S>>(HarmonyLib.AccessTools.PropertyGetter(typeof(T), name)));
+            //return new FastGetter<T, S>(HarmonyLib.FastAccess.CreateGetterHandler<T, S>(HarmonyLib.AccessTools.Property(typeof(T), name)));
+            
         }
 
         //public static FastGetter CreateFieldGetter<T>(string name) => CreateFieldGetter(typeof(T), name);
 
-        public static FastGetter<T, S> CreateFieldGetter<T, S>(string name)
+        public static FastRef<T, S> CreateFieldGetter<T, S>(string name)
         {
-            return new FastGetter<T, S>(HarmonyLib.FastAccess.CreateGetterHandler<T, S>(HarmonyLib.AccessTools.Field(typeof(T), name)));
+            return new FastRef<T, S>(HarmonyLib.AccessTools.FieldRefAccess<T, S>(HarmonyLib.AccessTools.Field(typeof(T), name)));
+            //return new FastGetter<T, S>(HarmonyLib.FastAccess.CreateGetterHandler<T, S>(HarmonyLib.AccessTools.Field(typeof(T), name)));
         }
 
         //public static FastSetter CreateSetter<T>(string name) => CreateSetter(typeof(T), name);
 
         public static FastSetter<T, S> CreateSetter<T, S>(string name)
         {
-            return new FastSetter<T, S>(HarmonyLib.FastAccess.CreateSetterHandler<T, S>(HarmonyLib.AccessTools.Property(typeof(T), name)));
+            return new FastSetter<T, S>(HarmonyLib.AccessTools.MethodDelegate<Action <T, S>>(HarmonyLib.AccessTools.PropertySetter(typeof(T), name)));
+            //return new FastSetter<T, S>(HarmonyLib.FastAccess.CreateSetterHandler<T, S>(HarmonyLib.AccessTools.Property(typeof(T), name)));
         }
 
         //public static FastSetter CreateFieldSetter<T>(string name) => CreateFieldSetter(typeof(T), name);
 
-        public static FastSetter<T, S> CreateFieldSetter<T, S>(string name)
+        public static FastRef<T, S> CreateFieldSetter<T, S>(string name)
         {
-            return new FastSetter<T, S>(HarmonyLib.FastAccess.CreateSetterHandler<T, S>(HarmonyLib.AccessTools.Field(typeof(T), name)));
+            return new FastRef<T, S>(HarmonyLib.AccessTools.FieldRefAccess<T, S>(HarmonyLib.AccessTools.Field(typeof(T), name)));
+            //return new FastSetter<T, S>(HarmonyLib.FastAccess.CreateSetterHandler<T, S>(HarmonyLib.AccessTools.Field(typeof(T), name)));
         }
 
         public static FastInvoke CreateInvoker<T>(String name) => CreateInvoker(typeof(T), name);
@@ -1237,14 +1242,14 @@ namespace KingmakerHarmony2Template.Utilities
             }
             strings[key] = value;
             localized = new LocalizedString();
-            localizedString_m_Key(localized, key);
+            localizedString_m_Key(localized) = key;
             textToLocalizedString[value] = localized;
             return localized;
         }
 
         // All localized strings created in this mod, mapped to their localized key. Populated by CreateString.
         static Dictionary<String, LocalizedString> textToLocalizedString = new Dictionary<string, LocalizedString>();
-        static FastSetter<LocalizedString, string> localizedString_m_Key = Helpers.CreateFieldSetter<LocalizedString, string>("m_Key");
+        static FastRef<LocalizedString, string> localizedString_m_Key = Helpers.CreateFieldSetter<LocalizedString, string>("m_Key");
 
         public static Sprite GetIcon(string assetId)
         {
@@ -1307,11 +1312,11 @@ namespace KingmakerHarmony2Template.Utilities
             var featSelectionIds = new String[] {
                 basicFeatSelection,
                 magusFeatSelection,
-                /*FighterFeatSelection*/
+                //FighterFeatSelection
                 "41c8486641f7d6d4283ca9dae4147a9f",
-                /*EldritchKnightFeatSelection*/
+                //EldritchKnightFeatSelection
                 "da03141df23f3fe45b0c7c323a8e5a0e",
-                /*WarDomainGreaterFeatSelection*/
+                //WarDomainGreaterFeatSelection
                 "79c6421dbdb028c4fa0c31b8eea95f16",
 
                 "c5158a6622d0b694a99efb1d0025d2c1", //combat trick
@@ -1712,14 +1717,14 @@ namespace KingmakerHarmony2Template.Utilities
             ability.Buff = buff;
             ability.ResourceAssetIds = Array.Empty<string>();
             ability.ActivationType = activationType;
-            set_ActivateWithUnitCommand(ability, commandType);
+            set_ActivateWithUnitCommand(ability) = commandType;
             ability.SetComponents(components);
             ability.ActivateWithUnitAnimation = activateWithUnitAnimation;
             Main.Library.AddAsset(ability, assetId);
             return ability;
         }
 
-        static readonly FastSetter<BlueprintActivatableAbility, UnitCommand.CommandType> set_ActivateWithUnitCommand = CreateFieldSetter<BlueprintActivatableAbility, UnitCommand.CommandType>("m_ActivateWithUnitCommand");
+        static readonly FastRef<BlueprintActivatableAbility, UnitCommand.CommandType> set_ActivateWithUnitCommand = CreateFieldSetter<BlueprintActivatableAbility, UnitCommand.CommandType>("m_ActivateWithUnitCommand");
 
         public static ActivatableAbilityResourceLogic CreateActivatableResourceLogic(this BlueprintAbilityResource resource,
             ResourceSpendType spendType)
@@ -1910,22 +1915,22 @@ namespace KingmakerHarmony2Template.Utilities
             (int, int)[] customProgression = null)
         {
             var config = Create<ContextRankConfig>();
-            setType(config, type);
-            setBaseValueType(config, baseValueType);
-            setProgression(config, progression);
-            setUseMin(config, min.HasValue);
-            setMin(config, min.GetValueOrDefault());
-            setUseMax(config, max.HasValue);
-            setMax(config, max.GetValueOrDefault());
-            setStartLevel(config, startLevel);
-            setStepLevel(config, stepLevel);
-            setFeature(config, feature);
-            setExceptClasses(config, exceptClasses);
-            setCustomProperty(config, customProperty);
-            setStat(config, stat);
-            setClass(config, classes ?? Array.Empty<BlueprintCharacterClass>());
-            setArchetype(config, archetype);
-            setFeatureList(config, featureList ?? Array.Empty<BlueprintFeature>());
+            setType(config) = type;
+            setBaseValueType(config) = baseValueType;
+            setProgression(config) = progression;
+            setUseMin(config) = min.HasValue;
+            setMin(config) = min.GetValueOrDefault();
+            setUseMax(config) = max.HasValue;
+            setMax(config) = max.GetValueOrDefault();
+            setStartLevel(config) = startLevel;
+            setStepLevel(config) = stepLevel;
+            setFeature(config) = feature;
+            setExceptClasses(config) = exceptClasses;
+            setCustomProperty(config) = customProperty;
+            setStat(config) = stat;
+            setClass(config) = classes ?? Array.Empty<BlueprintCharacterClass>();
+            setArchetype(config) = archetype;
+            setFeatureList(config) = featureList ?? Array.Empty<BlueprintFeature>();
 
             if (customProgression != null)
             {
@@ -1938,29 +1943,29 @@ namespace KingmakerHarmony2Template.Utilities
                     SetField(item, "ProgressionValue", p.Item2);
                     items.SetValue(item, i);
                 }
-                setCustomProgression(config, (object[])items);
+                setCustomProgression(config) = (object[])items;
             }
 
             return config;
         }
 
-        static readonly FastSetter<ContextRankConfig, AbilityRankType> setType = Helpers.CreateFieldSetter<ContextRankConfig, AbilityRankType>("m_Type");
-        static readonly FastSetter<ContextRankConfig, ContextRankBaseValueType> setBaseValueType = Helpers.CreateFieldSetter<ContextRankConfig, ContextRankBaseValueType>("m_BaseValueType");
-        static readonly FastSetter<ContextRankConfig, ContextRankProgression> setProgression = Helpers.CreateFieldSetter<ContextRankConfig, ContextRankProgression>("m_Progression");
-        static readonly FastSetter<ContextRankConfig, bool> setUseMin = Helpers.CreateFieldSetter<ContextRankConfig, bool>("m_UseMin");
-        static readonly FastSetter<ContextRankConfig, int> setMin = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_Min");
-        static readonly FastSetter<ContextRankConfig, bool> setUseMax = Helpers.CreateFieldSetter<ContextRankConfig, bool>("m_UseMax");
-        static readonly FastSetter<ContextRankConfig, int> setMax = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_Max");
-        static readonly FastSetter<ContextRankConfig, int> setStartLevel = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_StartLevel");
-        static readonly FastSetter<ContextRankConfig, int> setStepLevel = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_StepLevel");
-        static readonly FastSetter<ContextRankConfig, BlueprintFeature> setFeature = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintFeature>("m_Feature");
-        static readonly FastSetter<ContextRankConfig, bool> setExceptClasses = Helpers.CreateFieldSetter<ContextRankConfig, bool>("m_ExceptClasses");
-        static readonly FastSetter<ContextRankConfig, BlueprintUnitProperty> setCustomProperty = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintUnitProperty>("m_CustomProperty");
-        static readonly FastSetter<ContextRankConfig, StatType> setStat = Helpers.CreateFieldSetter<ContextRankConfig, StatType>("m_Stat");
-        static readonly FastSetter<ContextRankConfig, BlueprintCharacterClass[]> setClass = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintCharacterClass[]>("m_Class");
-        static readonly FastSetter<ContextRankConfig, BlueprintArchetype> setArchetype = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintArchetype>("Archetype");
-        static readonly FastSetter<ContextRankConfig, BlueprintFeature[]> setFeatureList = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintFeature[]>("m_FeatureList");
-        static readonly FastSetter<ContextRankConfig, object[]> setCustomProgression = Helpers.CreateFieldSetter<ContextRankConfig, object[]>("m_CustomProgression");
+        static readonly FastRef<ContextRankConfig, AbilityRankType> setType = Helpers.CreateFieldSetter<ContextRankConfig, AbilityRankType>("m_Type");
+        static readonly FastRef<ContextRankConfig, ContextRankBaseValueType> setBaseValueType = Helpers.CreateFieldSetter<ContextRankConfig, ContextRankBaseValueType>("m_BaseValueType");
+        static readonly FastRef<ContextRankConfig, ContextRankProgression> setProgression = Helpers.CreateFieldSetter<ContextRankConfig, ContextRankProgression>("m_Progression");
+        static readonly FastRef<ContextRankConfig, bool> setUseMin = Helpers.CreateFieldSetter<ContextRankConfig, bool>("m_UseMin");
+        static readonly FastRef<ContextRankConfig, int> setMin = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_Min");
+        static readonly FastRef<ContextRankConfig, bool> setUseMax = Helpers.CreateFieldSetter<ContextRankConfig, bool>("m_UseMax");
+        static readonly FastRef<ContextRankConfig, int> setMax = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_Max");
+        static readonly FastRef<ContextRankConfig, int> setStartLevel = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_StartLevel");
+        static readonly FastRef<ContextRankConfig, int> setStepLevel = Helpers.CreateFieldSetter<ContextRankConfig, int>("m_StepLevel");
+        static readonly FastRef<ContextRankConfig, BlueprintFeature> setFeature = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintFeature>("m_Feature");
+        static readonly FastRef<ContextRankConfig, bool> setExceptClasses = Helpers.CreateFieldSetter<ContextRankConfig, bool>("m_ExceptClasses");
+        static readonly FastRef<ContextRankConfig, BlueprintUnitProperty> setCustomProperty = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintUnitProperty>("m_CustomProperty");
+        static readonly FastRef<ContextRankConfig, StatType> setStat = Helpers.CreateFieldSetter<ContextRankConfig, StatType>("m_Stat");
+        static readonly FastRef<ContextRankConfig, BlueprintCharacterClass[]> setClass = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintCharacterClass[]>("m_Class");
+        static readonly FastRef<ContextRankConfig, BlueprintArchetype> setArchetype = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintArchetype>("Archetype");
+        static readonly FastRef<ContextRankConfig, BlueprintFeature[]> setFeatureList = Helpers.CreateFieldSetter<ContextRankConfig, BlueprintFeature[]>("m_FeatureList");
+        static readonly FastRef<ContextRankConfig, object[]> setCustomProgression = Helpers.CreateFieldSetter<ContextRankConfig, object[]>("m_CustomProgression");
         static readonly Type customProgressionItemType = HarmonyLib.AccessTools.Inner(typeof(ContextRankConfig), "CustomProgressionItem");
 
 
@@ -2435,9 +2440,9 @@ namespace KingmakerHarmony2Template.Utilities
                     foreach (var newItem in matched)
                     {
                         var lootItem = new LootItem();
-                        LootItem_setItem(lootItem, newItem);
+                        LootItem_setItem(lootItem) = newItem;
                         var newPack = UnityEngine.Object.Instantiate(pack);
-                        LootItemsPackFixed_setItem(newPack, lootItem);
+                        LootItemsPackFixed_setItem(newPack) = lootItem;
                         newComponents.Add(newPack);
                         //Log.Append($"Adding metamagic rod {rod.name} to unitloot: {unitLoot.name}");
                     }
@@ -2453,15 +2458,15 @@ namespace KingmakerHarmony2Template.Utilities
         static public void AddItemToSpecifiedVendorTable(BlueprintSharedVendorTable vendor_table, BlueprintItem new_item, int amount = 1)
         {
             var loot_item = new LootItem();
-            LootItem_setItem(loot_item, new_item);
+            LootItem_setItem(loot_item) =new_item;
             var new_pack = Helpers.Create<LootItemsPackFixed>();
-            LootItemsPackFixed_setItem(new_pack, loot_item);
+            LootItemsPackFixed_setItem(new_pack) = loot_item;
             Helpers.SetField(new_pack, "m_Count", amount);
             vendor_table.AddComponent(new_pack);
         }
 
-        static readonly FastSetter<LootItem, BlueprintItem> LootItem_setItem = CreateFieldSetter<LootItem, BlueprintItem>("m_Item");
-        static readonly FastSetter<LootItemsPackFixed, LootItem> LootItemsPackFixed_setItem = CreateFieldSetter<LootItemsPackFixed, LootItem>("m_Item");
+        static readonly FastRef<LootItem, BlueprintItem> LootItem_setItem = CreateFieldSetter<LootItem, BlueprintItem>("m_Item");
+        static readonly FastRef<LootItemsPackFixed, LootItem> LootItemsPackFixed_setItem = CreateFieldSetter<LootItemsPackFixed, LootItem>("m_Item");
 
         public static BuffScaling CreateBuffScaling(BuffScaling.ScalingType type = BuffScaling.ScalingType.ByCasterLevel, int divModifier = 1, int startingMod = 0, int minimum = 1, BlueprintCharacterClass @class = null)
         {
@@ -3075,8 +3080,9 @@ namespace KingmakerHarmony2Template.Utilities
         static ValidationContext validation = new ValidationContext();
     }
 
-
+    public delegate ref S FastRef<T, S>(T source = default);
     public delegate void FastSetter<T, S>(T source, S value);
     public delegate S FastGetter<T, S>(T source);
     public delegate object FastInvoke(object target, params object[] paramters);
+
 }

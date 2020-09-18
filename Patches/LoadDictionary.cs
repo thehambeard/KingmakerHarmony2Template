@@ -1,5 +1,6 @@
-﻿/* Remove this file form your project if you are not going to patch any methods or use the EAHelpers.cs*/
+﻿/* Remove this file form your project if you are not going use the EAHelpers.cs*/
 using Kingmaker.Blueprints;
+using Kingmaker.Localization;
 using KingmakerHarmony2Template.Utilities;
 using System;
 using static KingmakerHarmony2Template.Utilities.SettingsWrapper;
@@ -20,6 +21,7 @@ namespace KingmakerHarmony2Template.Patches
             {
 #if DEBUG
                 bool allow_guid_generation = true;
+                
 #else
                 bool allow_guid_generation = false; //no guids should be ever generated in release
 #endif
